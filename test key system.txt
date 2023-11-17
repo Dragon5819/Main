@@ -1,0 +1,186 @@
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
+
+local HTTP = syn and syn.request or http_request or request or HttpPost
+
+local WebhookURL = "https://discord.com/api/webhooks/1142376027809656864/d5GAzlgs_xC5aLxXTlHqL2fl46I3TWMBBMdKkLyTwR_P8dKUccFccAnZaHCmzZ_pD5bk"
+
+local Headers = {
+    ['Content-Type'] = 'application/json',
+}
+
+local player = Players.LocalPlayer
+local userId = player.UserId
+local username = player.Name
+local hwid = RbxAnalyticsService:GetClientId()
+
+-- Generate a random color
+local randomColor = math.random(0x000000, 0xFFFFFF)
+
+local currentTime = os.date("!*t") -- Get UTC time
+local timestamp = string.format("%s %02d:%02d:%02d UTC", os.date("%B"), currentTime.hour, currentTime.min, currentTime.sec)
+
+-- Get the ID of the Roblox game
+local gameId = game.GameId
+
+local data = {
+    ["embeds"] = {
+        {
+            ["title"] = "AE Key System Logger",
+            ["description"] = "Someone executed AE Key System",
+            ["type"] = "rich",
+            ["color"] = randomColor,
+            ["fields"] = {
+                {
+                    ["name"] = "Username:",
+                    ["value"] = username .. " (" .. userId .. ")",
+                    ["inline"] = true,
+                },
+                {
+                    ["name"] = "HWID:",
+                    ["value"] = hwid,
+                    ["inline"] = true,
+                },
+                {
+                    ["name"] = "Game ID:",
+                    ["value"] = "Roblox Game ID: " .. gameId,
+                    ["inline"] = false,
+                },
+                {
+                    ["name"] = "Timestamp:",
+                    ["value"] = timestamp,
+                    ["inline"] = false,
+                },
+            },
+        },
+    },
+}
+
+local PlayerData = HttpService:JSONEncode(data)
+
+local RequestData = {
+    Url = WebhookURL,
+    Method = "POST",
+    Headers = Headers,
+    Body = PlayerData,
+}
+
+-- Perform the request
+local success, response = pcall(HTTP, RequestData)
+if not success then
+    warn("Failed to send webhook:", response)
+end
+
+  
+  
+  
+--Real Script below
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/thanhdat4461/OrionMoblie/main/source')))()
+local Player = game.Players.LocalPlayer
+
+wait (1)
+local Window = OrionLib:MakeWindow({Name = "Key System", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest", IntroEnabled = true, IntroText = "Key System"})
+
+-- KEY --
+
+local function GetUserRole(userId)
+    local ownerIds = {2322236368, 9876543210} -- List of owner user IDs
+    local adminIds = {4567890123, 5432109876} -- List of admin user IDs
+    
+    if table.find(ownerIds, userId) then
+        return "Owner"
+    elseif table.find(adminIds, userId) then
+        return "Admin"
+    else
+        return "Member"
+    end
+end
+
+local Player = game.Players.LocalPlayer
+local UserId = Player.UserId
+local UserRole = GetUserRole(UserId)
+
+local roleMessage = "Role: "
+if UserRole == "Owner" then
+    roleMessage = roleMessage .. "Owner"
+elseif UserRole == "Admin" then
+    roleMessage = roleMessage .. "Admin"
+else
+    roleMessage = roleMessage .. "Member"
+end
+
+OrionLib:MakeNotification({
+    Name = "Logged in",
+    Content = "You are logged in as " .. Player.Name,
+    Image = "rbxassetid://14445132214",
+    Time = 5
+})
+
+OrionLib:MakeNotification({
+    Name = "Role Notification",
+    Content = roleMessage,
+    Image = "rbxassetid://14590929928", -- Replace with a suitable image ID
+    Time = 5
+})
+
+ 
+_G.Key = game:HttpGet('https://pastebin.com/raw/Gmys1Zcx')
+_G.KeyInput = "string"
+
+function MakeScriptHub()
+    print("correct")
+end
+
+function CorrectKeyNotification()
+    OrionLib:MakeNotification({
+        Name = "Correct Key!",
+        Content = "You have entered the correct key!",
+        Imagine = "rbxassetid://14445221506",
+        Time = 5
+    })
+end
+
+function IncorrectKeyNotification()
+    OrionLib:MakeNotification({
+        Name = "Incorrect Key!",
+        Content = "You have entered the incorrect key!",
+        Imagine = "rbxassetid://14445221506",
+        Time = 5
+    })
+end
+
+local KeyTab = Window:MakeTab({
+    Name = "Key",
+    Icon = "rbxassetid://14445221506",
+    PremiumOnly = false
+})
+
+KeyTab:AddTextbox({
+    Name = "Enter key",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Value)
+        _G.KeyInput = Value
+    end	  
+})
+
+KeyTab:AddButton({
+    Name = "Check Key",
+    Callback = function()
+        if _G.KeyInput == _G.Key then
+            wait(1)
+            CorrectKeyNotification()
+            MakeScriptHub()
+        else
+            IncorrectKeyNotification()
+        end
+    end    
+})
+
+KeyTab:AddButton({
+    Name = "Get Key",
+    Callback = function()
+        setclipboard("Work")
+    end    
+})
